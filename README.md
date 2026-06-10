@@ -68,13 +68,13 @@ And in 2026, when your team uses AI coding assistants daily — apitype is the t
 
 ```sh
 # One-off use (no install)
-npx @jayesh-bansal/apitype <url|file>
+npx @jayeshbansal/apitype <url|file>
 
 # Global install
-npm install -g @jayesh-bansal/apitype
+npm install -g @jayeshbansal/apitype
 
 # Dev dependency (for programmatic use or Vite plugin)
-npm install -D @jayesh-bansal/apitype
+npm install -D @jayeshbansal/apitype
 ```
 
 ---
