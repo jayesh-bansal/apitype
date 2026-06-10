@@ -1,0 +1,68 @@
+{
+  "name": "apitype",
+  "version": "0.1.0",
+  "description": "Generate TypeScript types and Zod schemas from any API endpoint or JSON file — instantly.",
+  "keywords": [
+    "typescript",
+    "zod",
+    "schema",
+    "api",
+    "types",
+    "codegen",
+    "json",
+    "cli",
+    "developer-tools",
+    "type-generation"
+  ],
+  "homepage": "https://github.com/yourusername/apitype",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/apitype.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/apitype/issues"
+  },
+  "license": "MIT",
+  "author": "Your Name",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "bin": {
+    "apitype": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.0",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
