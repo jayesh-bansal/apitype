@@ -1,6 +1,6 @@
 {
   "name": "@jayeshbansal/apitype",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate TypeScript types, Zod schemas, TypeBox, and JSON Schema from any API endpoint or JSON — instantly. Works as a CLI, MCP server, Vite plugin, and GitHub Action.",
   "keywords": [
     "typescript",
@@ -19,6 +19,7 @@
     "developer-tools",
     "type-generation",
     "schema",
+    "schema-generation",
     "openapi"
   ],
   "homepage": "https://github.com/jayesh-bansal/apitype",
