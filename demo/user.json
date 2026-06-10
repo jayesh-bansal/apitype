@@ -1,0 +1,20 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "Alice Johnson",
+  "email": "alice@example.com",
+  "avatar": "https://example.com/avatars/alice.png",
+  "role": "admin",
+  "age": 28,
+  "score": 98.5,
+  "verified": true,
+  "bio": null,
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-06-10T08:00:00Z",
+  "address": {
+    "street": "123 Main St",
+    "city": "San Francisco",
+    "zip": "94102",
+    "country": "US"
+  },
+  "tags": ["typescript", "developer", "open-source"]
+}

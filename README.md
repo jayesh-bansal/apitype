@@ -2,31 +2,12 @@
 
 **Generate TypeScript types, Zod schemas, TypeBox, and JSON Schema from any API endpoint or JSON — instantly.**
 
-```sh
-npx apitype https://api.github.com/users/octocat --name GithubUser
-```
-
-```ts
-import { z } from 'zod'
-
-export const githubUserSchema = z.object({
-  login: z.string(),
-  id: z.number().int().nonnegative(),
-  avatar_url: z.string().url(),
-  email: z.string().email().nullable(),
-  created_at: z.string().datetime(),
-  public_repos: z.number().int().nonnegative(),
-  site_admin: z.boolean(),
-  // ...
-})
-
-export type GithubUser = z.infer<typeof githubUserSchema>
-```
+![apitype demo](demo/demo.svg)
 
 Zero config. No OpenAPI spec needed. Works as a **CLI**, **MCP server for AI assistants**, **Vite plugin**, and **GitHub Action**.
 
-[![npm version](https://img.shields.io/npm/v/apitype.svg)](https://www.npmjs.com/package/apitype)
-[![npm downloads](https://img.shields.io/npm/dm/apitype.svg)](https://www.npmjs.com/package/apitype)
+[![npm version](https://img.shields.io/npm/v/%40jayeshbansal%2Fapitype.svg)](https://www.npmjs.com/package/@jayeshbansal/apitype)
+[![npm downloads](https://img.shields.io/npm/dm/%40jayeshbansal%2Fapitype.svg)](https://www.npmjs.com/package/@jayeshbansal/apitype)
 [![CI](https://github.com/jayesh-bansal/apitype/actions/workflows/ci.yml/badge.svg)](https://github.com/jayesh-bansal/apitype/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -40,7 +21,7 @@ Every developer writing API integrations writes the same boilerplate: copy a JSO
 
 ```
 Before:  20 minutes of manual typing + guessing nullable fields
-After:   npx apitype <url>   →  3 seconds
+After:   npx @jayeshbansal/apitype <url>   →  3 seconds
 ```
 
 And in 2026, when your team uses AI coding assistants daily — apitype is the tool those assistants call under the hood.
@@ -59,7 +40,7 @@ And in 2026, when your team uses AI coding assistants daily — apitype is the t
 - **Vite plugin** — types regenerated at dev server start, zero workflow change
 - **GitHub Action** — keep types in sync in CI, fail if they drift
 - **ENV var interpolation** — use `${API_KEY}` in config headers, never hardcode secrets
-- **Programmatic API** — `import { fromUrl, fromJson } from 'apitype'`
+- **Programmatic API** — `import { fromUrl, fromJson } from '@jayeshbansal/apitype'`
 - **Zero library deps** — Chalk and Ora are CLI-only; the library ships with no runtime dependencies
 
 ---
@@ -85,29 +66,29 @@ npm install -D @jayeshbansal/apitype
 
 ```sh
 # From a URL
-npx apitype https://api.github.com/users/octocat
+npx @jayeshbansal/apitype https://api.github.com/users/octocat
 
 # Custom name
-npx apitype https://api.github.com/users/octocat --name GithubUser
+npx @jayeshbansal/apitype https://api.github.com/users/octocat --name GithubUser
 
 # TypeBox format
-npx apitype https://api.example.com/products/1 --format typebox --name Product
+npx @jayeshbansal/apitype https://api.example.com/products/1 --format typebox --name Product
 
 # With auth header + typed fetch wrapper + write to file
-npx apitype https://api.example.com/me \
+npx @jayeshbansal/apitype https://api.example.com/me \
   --header "Authorization: Bearer $TOKEN" \
   --name CurrentUser \
   --fetch \
   --out src/types/me.ts
 
 # Sample 5 times for accurate nullable/optional detection
-npx apitype https://api.example.com/posts/random --name Post --samples 5
+npx @jayeshbansal/apitype https://api.example.com/posts/random --name Post --samples 5
 
 # From a local JSON file
-npx apitype response.json --name ApiResponse --out src/types/api.ts
+npx @jayeshbansal/apitype response.json --name ApiResponse --out src/types/api.ts
 
 # From stdin
-curl -s https://api.github.com/users/octocat | npx apitype --name GithubUser
+curl -s https://api.github.com/users/octocat | npx @jayeshbansal/apitype --name GithubUser
 ```
 
 ### Batch mode
@@ -147,9 +128,9 @@ Create `apitype.config.json`:
 Then run:
 
 ```sh
-npx apitype                          # auto-detects apitype.config.json
-npx apitype --config my-config.json  # explicit path
-npx apitype --config apitype.config.json --watch  # re-run on changes
+npx @jayeshbansal/apitype                          # auto-detects apitype.config.json
+npx @jayeshbansal/apitype --config my-config.json  # explicit path
+npx @jayeshbansal/apitype --config apitype.config.json --watch  # re-run on changes
 ```
 
 ### All flags
@@ -225,13 +206,13 @@ All tools accept `name`, `format` (`zod`/`typebox`/`typescript`/`jsonschema`), a
 ## Vite Plugin
 
 ```sh
-npm install -D apitype
+npm install -D @jayeshbansal/apitype
 ```
 
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite'
-import { apitype } from 'apitype/vite'
+import { apitype } from '@jayeshbansal/apitype/vite'
 
 export default defineConfig({
   plugins: [
@@ -308,13 +289,13 @@ jobs:
 ## Programmatic API
 
 ```sh
-npm install apitype
+npm install @jayeshbansal/apitype
 ```
 
 ### `fromUrl(url, options?)`
 
 ```ts
-import { fromUrl } from 'apitype'
+import { fromUrl } from '@jayeshbansal/apitype'
 
 const result = await fromUrl('https://api.github.com/users/octocat', {
   name: 'GithubUser',
@@ -332,7 +313,7 @@ console.log(result.combined)  // full file content
 ### `fromJson(data, options?)`
 
 ```ts
-import { fromJson } from 'apitype'
+import { fromJson } from '@jayeshbansal/apitype'
 
 const result = fromJson(
   { id: '550e8400-...', name: 'Alice', bio: 'Developer' },
@@ -352,7 +333,7 @@ const result = fromJson(
 ### `fromString(json, options?)`
 
 ```ts
-import { fromString } from 'apitype'
+import { fromString } from '@jayeshbansal/apitype'
 
 const result = fromString('{"hello":"world"}', { name: 'Greeting' })
 ```
@@ -360,7 +341,7 @@ const result = fromString('{"hello":"world"}', { name: 'Greeting' })
 ### Batch processing
 
 ```ts
-import { loadConfig, runBatch } from 'apitype'
+import { loadConfig, runBatch } from '@jayeshbansal/apitype'
 
 const config = await loadConfig('apitype.config.json')
 const results = await runBatch(config, {
@@ -374,7 +355,7 @@ const results = await runBatch(config, {
 
 ```ts
 // apitype.config.js
-import { defineConfig } from 'apitype'
+import { defineConfig } from '@jayeshbansal/apitype'
 
 export default defineConfig({
   endpoints: [
@@ -417,7 +398,7 @@ export default defineConfig({
 
 ```sh
 STRIPE_SECRET_KEY=sk_test_... \
-npx apitype https://api.stripe.com/v1/customers/cus_xxx \
+npx @jayeshbansal/apitype https://api.stripe.com/v1/customers/cus_xxx \
   -H "Authorization: Bearer $STRIPE_SECRET_KEY" \
   --name StripeCustomer \
   --out src/types/stripe.ts
@@ -427,7 +408,7 @@ npx apitype https://api.stripe.com/v1/customers/cus_xxx \
 
 ```sh
 # Fetch 5 times to correctly detect nullable/optional fields
-npx apitype https://your-api.com/api/users/random \
+npx @jayeshbansal/apitype https://your-api.com/api/users/random \
   -H "Authorization: Bearer $API_TOKEN" \
   --name User \
   --samples 5 \
@@ -437,7 +418,7 @@ npx apitype https://your-api.com/api/users/random \
 ### TypeBox for Fastify
 
 ```sh
-npx apitype https://api.example.com/products/1 \
+npx @jayeshbansal/apitype https://api.example.com/products/1 \
   --format typebox \
   --name Product \
   --fetch \
@@ -468,8 +449,8 @@ export async function fetchProduct(options?: RequestInit): Promise<Product> {
 ### Clipboard (macOS/Linux)
 
 ```sh
-pbpaste | npx apitype --name ApiResponse   # macOS
-xclip -o | npx apitype --name ApiResponse  # Linux
+pbpaste | npx @jayeshbansal/apitype --name ApiResponse   # macOS
+xclip -o | npx @jayeshbansal/apitype --name ApiResponse  # Linux
 ```
 
 ---
