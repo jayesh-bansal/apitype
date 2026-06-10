@@ -1,38 +1,50 @@
 {
   "name": "apitype",
-  "version": "0.1.0",
-  "description": "Generate TypeScript types and Zod schemas from any API endpoint or JSON file — instantly.",
+  "version": "0.2.0",
+  "description": "Generate TypeScript types, Zod schemas, TypeBox, and JSON Schema from any API endpoint or JSON — instantly. Works as a CLI, MCP server, Vite plugin, and GitHub Action.",
   "keywords": [
     "typescript",
     "zod",
-    "schema",
+    "typebox",
+    "json-schema",
     "api",
     "types",
     "codegen",
+    "code-generation",
     "json",
     "cli",
+    "mcp",
+    "model-context-protocol",
+    "vite-plugin",
     "developer-tools",
-    "type-generation"
+    "type-generation",
+    "schema",
+    "openapi"
   ],
-  "homepage": "https://github.com/yourusername/apitype",
+  "homepage": "https://github.com/jayesh-bansal/apitype",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/apitype.git"
+    "url": "https://github.com/jayesh-bansal/apitype.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/apitype/issues"
+    "url": "https://github.com/jayesh-bansal/apitype/issues"
   },
   "license": "MIT",
-  "author": "Your Name",
+  "author": "Jayesh Bansal",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "types":   "./dist/index.d.ts",
+      "import":  "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./vite": {
+      "types":   "./dist/vite.d.ts",
+      "import":  "./dist/vite.js",
+      "require": "./dist/vite.cjs"
     }
   },
   "bin": {
@@ -40,27 +52,33 @@
   },
   "files": [
     "dist",
+    "action.yml",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src",
+    "build":          "tsup",
+    "dev":            "tsup --watch",
+    "test":           "vitest run",
+    "test:watch":     "vitest",
+    "typecheck":      "tsc --noEmit",
     "prepublishOnly": "npm run build && npm run test"
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "ora": "^8.1.0"
+    "ora":   "^8.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
-    "tsup": "^8.1.0",
-    "typescript": "^5.5.0",
-    "vitest": "^1.6.0"
+    "tsup":        "^8.1.0",
+    "typescript":  "^5.5.0",
+    "vitest":      "^1.6.0"
+  },
+  "peerDependencies": {
+    "vite": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vite": { "optional": true }
   },
   "engines": {
     "node": ">=18.0.0"

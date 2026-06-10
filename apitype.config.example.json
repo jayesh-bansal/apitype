@@ -1,0 +1,36 @@
+{
+  "endpoints": [
+    {
+      "url": "https://api.github.com/users/octocat",
+      "name": "GithubUser",
+      "out": "src/types/github-user.ts"
+    },
+    {
+      "url": "https://api.github.com/repos/octocat/Hello-World",
+      "name": "GithubRepo",
+      "out": "src/types/github-repo.ts",
+      "fetchWrapper": true
+    },
+    {
+      "url": "https://api.stripe.com/v1/customers",
+      "name": "StripeCustomer",
+      "out": "src/types/stripe.ts",
+      "format": "zod",
+      "headers": {
+        "Authorization": "Bearer ${STRIPE_SECRET_KEY}"
+      }
+    },
+    {
+      "url": "https://your-api.com/api/products/1",
+      "name": "Product",
+      "out": "src/types/product.ts",
+      "format": "typebox",
+      "samples": 3
+    }
+  ],
+  "defaults": {
+    "format": "zod",
+    "fetchWrapper": false,
+    "samples": 1
+  }
+}

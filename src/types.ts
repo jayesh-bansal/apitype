@@ -22,6 +22,9 @@ export type StringFormat =
   | 'semver'
   | 'hex-color'
 
+/** Output format for generated code */
+export type OutputFormat = 'zod' | 'typebox' | 'typescript' | 'jsonschema'
+
 export type InferredSchema =
   | { kind: 'null' }
   | { kind: 'unknown' }
@@ -42,7 +45,9 @@ export interface PropertySchema {
 export interface GenerateOptions {
   /** Root schema name (PascalCase) */
   name?: string
-  /** Include Zod schema alongside TypeScript types (default: true) */
+  /** Output format (default: 'zod') */
+  format?: OutputFormat
+  /** Include Zod schema — only when format is 'zod' (default: true) */
   zod?: boolean
   /** Include TypeScript type alias (default: true) */
   typescript?: boolean
@@ -55,19 +60,48 @@ export interface GenerateOptions {
 }
 
 export interface GenerateResult {
-  /** Zod schema code (if requested) */
-  zod?: string
-  /** TypeScript type alias code (if requested) */
+  /** Primary schema code (Zod / TypeBox / JSON Schema) */
+  schema?: string
+  /** TypeScript type alias code */
   typescript?: string
-  /** Fetch wrapper function code (if requested) */
+  /** Fetch wrapper function code */
   fetchWrapper?: string
-  /** Combined output */
+  /** Combined output ready to write to a file */
   combined: string
+  /** The format that was used */
+  format: OutputFormat
 }
 
 export interface FetchOptions {
   headers?: Record<string, string>
-  /** How many times to sample the URL (merges results for better nullable inference) */
+  /** How many times to sample the URL for better nullable inference */
   samples?: number
   timeout?: number
+}
+
+// ── Config file types ────────────────────────────────────────────────────────
+
+export interface EndpointConfig {
+  /** URL to fetch or path to a local JSON file */
+  url: string
+  /** Schema name in PascalCase */
+  name: string
+  /** Output file path */
+  out: string
+  headers?: Record<string, string>
+  samples?: number
+  format?: OutputFormat
+  fetchWrapper?: boolean
+  timeout?: number
+}
+
+export interface ApitypeConfig {
+  endpoints: EndpointConfig[]
+  defaults?: {
+    format?: OutputFormat
+    fetchWrapper?: boolean
+    samples?: number
+    headers?: Record<string, string>
+    timeout?: number
+  }
 }

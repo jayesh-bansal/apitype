@@ -2,27 +2,35 @@ import { inferSchema, mergeMultipleSamples } from './infer.js'
 import { generate } from './generate.js'
 import type { FetchOptions, GenerateOptions, GenerateResult } from './types.js'
 
-export type { FetchOptions, GenerateOptions, GenerateResult, InferredSchema } from './types.js'
+// ── Re-exports ────────────────────────────────────────────────────────────────
+
+export type {
+  FetchOptions,
+  GenerateOptions,
+  GenerateResult,
+  InferredSchema,
+  OutputFormat,
+  ApitypeConfig,
+  EndpointConfig,
+} from './types.js'
+
 export { inferSchema, mergeMultipleSamples } from './infer.js'
 export { generate } from './generate.js'
+export { defineConfig, loadConfig, findConfig } from './config.js'
+export { runBatch } from './batch.js'
+export type { BatchResult, BatchOptions } from './batch.js'
 
-// ── Public API ───────────────────────────────────────────────────────────────
+// ── Core API ─────────────────────────────────────────────────────────────────
 
 export interface FromJsonOptions extends GenerateOptions {
-  /** Infer from multiple JSON values for better nullable/optional detection */
   samples?: unknown[]
 }
 
 /**
- * Generate TypeScript types and Zod schemas from a JSON value.
+ * Generate types from a JSON value (in-memory).
  *
  * @example
- * ```ts
- * import { fromJson } from 'apitype'
- *
- * const result = await fromJson({ id: '123e4567-e89b-12d3-a456-426614174000', name: 'Alice' })
- * console.log(result.combined)
- * ```
+ * const result = fromJson({ id: '550e8400-...', name: 'Alice' }, { name: 'User' })
  */
 export function fromJson(data: unknown, opts: FromJsonOptions = {}): GenerateResult {
   const { samples, ...genOpts } = opts
@@ -33,18 +41,13 @@ export function fromJson(data: unknown, opts: FromJsonOptions = {}): GenerateRes
 }
 
 /**
- * Generate TypeScript types and Zod schemas by fetching a URL.
+ * Generate types by fetching a URL.
  *
  * @example
- * ```ts
- * import { fromUrl } from 'apitype'
- *
  * const result = await fromUrl('https://api.github.com/users/octocat', {
  *   name: 'GithubUser',
  *   fetchWrapper: true,
  * })
- * console.log(result.combined)
- * ```
  */
 export async function fromUrl(
   url: string,
@@ -57,7 +60,7 @@ export async function fromUrl(
 
   const fetchOne = async (): Promise<unknown> => {
     const res = await fetch(url, {
-      headers: { 'Accept': 'application/json', ...headers },
+      headers: { Accept: 'application/json', ...headers },
       signal: controller.signal,
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
@@ -82,8 +85,11 @@ export async function fromUrl(
 }
 
 /**
- * Generate TypeScript types and Zod schemas from a JSON string.
+ * Generate types from a raw JSON string.
+ *
+ * @example
+ * const result = fromString('{"hello":"world"}', { name: 'Greeting' })
  */
 export function fromString(json: string, opts: FromJsonOptions = {}): GenerateResult {
-  return fromJson(JSON.parse(json), opts)
+  return fromJson(JSON.parse(json) as unknown, opts)
 }

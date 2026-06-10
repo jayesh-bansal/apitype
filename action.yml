@@ -1,0 +1,69 @@
+name: 'apitype'
+description: 'Auto-generate and sync TypeScript types from API endpoints in CI'
+author: 'jayesh-bansal'
+
+branding:
+  icon: 'code'
+  color: 'blue'
+
+inputs:
+  config:
+    description: 'Path to apitype config file (apitype.config.json)'
+    required: false
+    default: 'apitype.config.json'
+  version:
+    description: 'Version of apitype to use'
+    required: false
+    default: 'latest'
+  fail-on-diff:
+    description: >
+      Fail the workflow if the generated types differ from what is committed.
+      Useful for enforcing that types are always kept in sync.
+    required: false
+    default: 'true'
+  commit-changes:
+    description: >
+      Automatically commit updated types if they changed.
+      Requires write permissions on the repo (contents: write).
+    required: false
+    default: 'false'
+  commit-message:
+    description: 'Commit message when commit-changes is true'
+    required: false
+    default: 'chore: sync api types [skip ci]'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Generate types from API endpoints
+      shell: bash
+      run: npx apitype@${{ inputs.version }} --config ${{ inputs.config }}
+
+    - name: Check for uncommitted type changes
+      if: inputs.fail-on-diff == 'true' && inputs.commit-changes == 'false'
+      shell: bash
+      run: |
+        if ! git diff --quiet; then
+          echo ""
+          echo "::error::Generated types are out of sync with committed files."
+          echo "::error::Run 'npx apitype --config ${{ inputs.config }}' locally and commit the changes."
+          echo ""
+          git diff --stat
+          exit 1
+        fi
+        echo "✓ Types are up to date"
+
+    - name: Commit updated types
+      if: inputs.commit-changes == 'true'
+      shell: bash
+      run: |
+        if ! git diff --quiet; then
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "${{ inputs.commit-message }}"
+          git push
+          echo "✓ Committed updated types"
+        else
+          echo "✓ No changes to commit"
+        fi
